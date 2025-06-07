@@ -1,0 +1,230 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url("../images/Background.png");
+  background-size: cover;
+  background-position: center;
+  font-family: Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+.logo {
+  height: 100px;
+  width: 100px;
+}
+
+.nav-bar {
+  max-width: 100%;
+  padding: 0px 30px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.logo-container {
+  flex-shrink: 0;         /* prevent shrinking */
+  margin-right: 30px;     /* space between logo and links */
+}
+
+.nav-links {
+  display: flex;
+  justify-content: space-around;  /* spread links */
+  flex-grow: 1;                    /* takes up remaining space */
+  margin-left: 50px;               /* space between logo and links */
+  gap: 30px;                       /* space between individual links */
+  list-style: none;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+}
+
+.nav-links li a.active {
+  background-color: black;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+}
+
+.login-box {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+  width: 350px;
+  text-align: center;
+  justify-content: center;
+  margin: 100px auto 0 auto;
+  margin-bottom: 100px;
+}
+
+.login-box h2 {
+  margin-bottom: 25px;
+}
+
+.login-box input {
+  width: 90%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.login-box button {
+  width: 100%;
+  padding: 10px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.options {
+  margin-top: 15px;
+  font-size: 0.9em;
+}
+
+.options a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+footer {
+  position: absolute;
+  bottom: 10px;
+  left: 30px;
+  color: black;
+}
+
+.logo-container{
+  justify-content: center;
+
+}
+
+
+.map-container {
+  max-width: 1200px; /* Adjust as needed */
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+  height: 600px; /* Or however tall you want it */
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px; /* Optional */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Optional */
+}
+
+.pac-card {
+  background-color: #fff;
+  border: 0;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
+  margin: 10px;
+  padding: 0 0.5em;
+  font: 400 18px Roboto, Arial, sans-serif;
+  overflow: hidden;
+  font-family: Roboto;
+  padding: 0;
+}
+
+#pac-container {
+  padding-bottom: 12px;
+  margin-right: 12px;
+}
+
+.pac-controls {
+  display: inline-block;
+  padding: 5px 11px;
+}
+
+.pac-controls label {
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: 300;
+}
+
+#pac-input {
+  position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 300px;
+
+}
+
+#pac-input:focus {
+  border-color: #4d90fe;
+}
+
+.radio-group {
+  display:flex;
+  justify-content: space-between;
+  gap: 40px; /* space between buttons */
+  margin-bottom: 15px;
+  margin-right: 90px;
+  margin-top: 20px;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+
+input[type="radio"] {
+  transform: scale(1.5); /* Increase size */
+  margin-right: 8px;
+}
+
+.report-table-section {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  margin: 20px auto;
+  max-width: 55%;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.report-table th, .report-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.report-table th {
+  background-color: #f4f4f4;
+}
+
+.view-more {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.view-more .btn {
+  padding: 10px 20px;
+  background-color: black;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}

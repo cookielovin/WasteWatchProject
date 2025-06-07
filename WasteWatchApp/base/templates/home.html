@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign In</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="logo-container">
+          <img src="{% static 'images/WasteWatchLogo.png' %}" class="logo" alt="Logo">
+        </div>
+        <ul class="nav-links">
+          <li><a href="#">Sign Up</a></li>
+          <li><a href="http://127.0.0.1:8000/home/">Home</a></li>
+          <li><a href="#">Reports</a></li>
+          <li><a href="#">Maps</a></li>
+          <li><a class="active" href="http://127.0.0.1:8000/login/">Sign In</a></li>
+        </ul>
+    </div>
+        <!--The div element for the map -->
+        <div class="map-container">
+          <input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
+        <div id="map"></div>
+        </div>
+
+        <!--Div element for report list section-->
+        <div class="report-table-section">
+        <h2>Recent Waste Reports</h2>
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Time and Date</th>
+              <th>Description</th>
+              <th>Waste Category</th>
+              <th>Address</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for report in reports %}
+            <tr>
+              <td>{{ report.submitted_at|truncatechars:20 }}</td>
+              <td>{{ report.description|truncatechars:35 }}</td>
+              <td>{{ report.category }}</td>
+              <td>{{ report.address|truncatechars:35 }}</td>
+              <td>
+                {% if report.status == "red" %}
+                  <span style="color:red;">●</span>
+                {% elif report.status == "yellow" %}
+                  <span style="color:orange;">●</span>
+                {% elif report.status == "green" %}
+                  <span style="color:green;">●</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        
+
+         <script>
+            function initMap() {
+            const map = new google.maps.Map(document.getElementById("map"), {
+              center: { lat: 3.1390, lng: 101.6869 },
+              zoom: 12,
+            });
+
+            const input = document.getElementById("pac-input");
+            const searchBox = new google.maps.places.SearchBox(input);
+
+            // Bias the SearchBox results towards map's current viewport.
+            map.addListener("bounds_changed", () => {
+              searchBox.setBounds(map.getBounds());
+            });
+
+            let markers = [];
+
+            // Listen for the event fired when the user selects a prediction.
+            searchBox.addListener("places_changed", () => {
+              const places = searchBox.getPlaces();
+
+              if (places.length === 0) {
+                return;
+              }
+
+              // Clear out the old markers.
+              markers.forEach((marker) => marker.setMap(null));
+              markers = [];
+
+              // For each place, get the icon, name and location.
+              const bounds = new google.maps.LatLngBounds();
+
+              places.forEach((place) => {
+                if (!place.geometry || !place.geometry.location) {
+                  console.log("Returned place has no geometry");
+                  return;
+                }
+
+                markers.push(
+                  new google.maps.Marker({
+                    map,
+                    position: place.geometry.location,
+                  })
+                );
+
+                if (place.geometry.viewport) {
+                  // Only geocodes have viewport.
+                  bounds.union(place.geometry.viewport);
+                } else {
+                  bounds.extend(place.geometry.location);
+                } 
+              });
+
+              map.fitBounds(bounds);
+            });
+          }
+         </script>
+          
+          <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBN8NbjGf0zL4FyMeGMcozh7t7eWvK5aqY&callback=initMap&libraries=places&v=weekly"defer>
+          </script>
+       
+        
+
+</body>
+</html>

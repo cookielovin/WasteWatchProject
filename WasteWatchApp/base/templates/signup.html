@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  </head>
+  <body>
+    <div class="nav-bar">
+      <div class="logo-container">
+        <img src="{% static 'images/WasteWatchLogo.png' %}" class="logo" alt="Logo">
+      </div>
+      <ul class="nav-links">
+        <li><a href="#">Sign Up</a></li>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Reports</a></li>
+        <li><a href="#">Maps</a></li>
+        <li><a class="active" href="#">Sign In</a></li>
+      </ul>
+    </div>
+
+    <div class="login-container">
+      <div class="login-box">
+        <h2>Sign Up</h2>
+        {% if messages %}
+          <ul>
+            {% for message in messages %}
+              <li style="color: red;">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        <form method="post">
+          {% csrf_token %}
+
+          <label for="username">Username</label>
+          <input type="text" name="username" placeholder="Username">
+
+          <label for="email">E-Mail</label>
+          <input type="text" name="email" placeholder="E-Mail">
+
+          <label for="password1">Password</label>
+          <input type="password" name="password1" placeholder="Password">
+
+          <label for="password2">Confirm Password</label>
+          <input type="password" name="password2" placeholder="Confirm Password">
+
+          <label>Are you registering as an individual user?</label>
+          <div class="radio-group">
+            <label>
+              <input type="radio" name="is_individual" value="yes" id="individual-yes">
+              Yes
+            </label>
+            <label>
+              <input type="radio" name="is_individual" value="no" id="individual-no">
+              No
+            </label>
+          </div>
+
+          <div id="role">
+            <label>Select one that represents you:</label>
+            <div class="radio-group">
+              <label>
+                <input type="radio" name="role" value="ngo" id="role-ngo">
+                NGO
+              </label>
+              <label>
+                <input type="radio" name="role" value="authority" id="role-authority">
+                Government Authority
+              </label>
+            </div>
+
+            <div style="margin-top: 10px;">
+              <label for="id-number">Identification number</label>
+              <input type="text" name="identification_number" placeholder="Identification Number">
+            </div>
+          </div>
+
+          <button type="submit">Sign In</button>
+        </form>
+      </div>
+    </div>
+
+<script>
+  const individualYes = document.getElementById("individual-yes");
+  const individualNo = document.getElementById("individual-no");
+  const roleSection = document.getElementById("role");
+
+  // Function to toggle role section based on selected radio
+  function toggleRoleSection() {
+    if (individualNo.checked) {
+      roleSection.style.display = "block";
+    } else {
+      roleSection.style.display = "none";
+    }
+  }
+
+  // Attach change events
+  individualYes.addEventListener("change", toggleRoleSection);
+  individualNo.addEventListener("change", toggleRoleSection);
+
+  // 🔁 Run on page load too
+  window.addEventListener("DOMContentLoaded", toggleRoleSection);
+</script>
+
+</body>
+</html>
+
+

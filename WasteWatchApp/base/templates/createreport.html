@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  </head>
+  <body>
+    <div class="nav-bar">
+      <div class="logo-container">
+        <img src="{% static 'images/WasteWatchLogo.png' %}" class="logo" alt="Logo">
+      </div>
+      <ul class="nav-links">
+        <li><a href="#">Sign Up</a></li>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Reports</a></li>
+        <li><a href="#">Maps</a></li>
+        <li><a class="active" href="#">Sign In</a></li>
+      </ul>
+    </div>
+
+    <div class="map-container">
+          <input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
+        <div id="map"></div>
+    </div>
+
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBN8NbjGf0zL4FyMeGMcozh7t7eWvK5aqY&callback=initMap&libraries=places&v=weekly"defer>
+    </script>
+
+    <div class="login-container">
+      <div class="login-box">
+        <h2>Waste Report</h2>
+        {% if messages %}
+          <ul>
+            {% for message in messages %}
+              <li style="color: red;">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data" onsubmit="return checkLatLng();">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <label>Upload Images:</label>
+          <input type="file" name="images" multiple accept="image/*">
+
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+function checkLatLng() {
+    const lat = document.getElementById("id_latitude").value;
+    const lng = document.getElementById("id_longitude").value;
+
+    console.log("Submitting lat:", lat);
+    console.log("Submitting lng:", lng);
+
+    if (!lat || !lng) {
+        alert("Latitude or Longitude is missing!");
+        return false; // Prevent form submission
+    }
+
+    return true; // Allow submission
+}
+</script>
+
+  </body>
+
+<script>
+let map;
+let marker;
+
+function initMap() {
+    map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 3.1390, lng: 101.6869 }, // KL coords
+        zoom: 13,
+    });
+
+    const input = document.getElementById("pac-input");
+            const searchBox = new google.maps.places.SearchBox(input);
+
+            // Bias the SearchBox results towards map's current viewport.
+            map.addListener("bounds_changed", () => {
+              searchBox.setBounds(map.getBounds());
+            });
+
+            let markers = [];
+
+            // Listen for the event fired when the user selects a prediction.
+            searchBox.addListener("places_changed", () => {
+              const places = searchBox.getPlaces();
+
+              if (places.length === 0) {
+                return;
+              }
+
+              // Clear out the old markers.
+              markers.forEach((marker) => marker.setMap(null));
+              markers = [];
+
+              // For each place, get the icon, name and location.
+              const bounds = new google.maps.LatLngBounds();
+
+              places.forEach((place) => {
+                if (!place.geometry || !place.geometry.location) {
+                  console.log("Returned place has no geometry");
+                  return;
+                }
+
+                markers.push(
+                  new google.maps.Marker({
+                    map,
+                    position: place.geometry.location,
+                  })
+                );
+
+                if (place.geometry.viewport) {
+                  // Only geocodes have viewport.
+                  bounds.union(place.geometry.viewport);
+                } else {
+                  bounds.extend(place.geometry.location);
+                } 
+              });
+
+              map.fitBounds(bounds);
+            });
+
+    map.addListener("click", function(event) {
+        const lat = event.latLng.lat();
+        const lng = event.latLng.lng();
+
+        if (marker) {
+            marker.setMap(null);
+        }
+
+        marker = new google.maps.Marker({
+            position: { lat: lat, lng: lng },
+            map: map,
+        });
+
+        // Fill form fields
+        document.getElementById("id_latitude").value = lat;
+        document.getElementById("id_longitude").value = lng;
+
+        const latInput = document.getElementById("id_latitude");
+    const lngInput = document.getElementById("id_longitude");
+
+    if (latInput && lngInput) {
+        latInput.value = lat;
+        lngInput.value = lng;
+        console.log("Lat/Lng set successfully.");
+    } else {
+        console.log("Latitude or Longitude input not found in DOM.");
+    }
+
+        // Reverse geocode to get address
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ location: { lat: lat, lng: lng } }, function(results, status) {
+            if (status === "OK" && results[0]) {
+                document.getElementById("id_address").value = results[0].formatted_address;
+            }
+        });
+    });
+}
+
+</script>
+
+  </body>
+</html>
