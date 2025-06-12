@@ -31,7 +31,8 @@ class WasteReport(models.Model):
         ('nuclear waste', 'Nuclear Waste'),
 
     ]
-    
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.CharField(max_length=25, choices=WASTE_CATEGORIES)
     title = models.CharField(max_length=50)
     description = models.TextField()
